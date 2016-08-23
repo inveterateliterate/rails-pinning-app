@@ -10,7 +10,7 @@ class BoardsController < ApplicationController
   # GET /boards/1
   # GET /boards/1.json
   def show
-    @board = Board.find(params[:id])
+    @board = current_user.boards.find(params[:id])
     @pins = @board.pins
   end
 
