@@ -19,6 +19,7 @@
     <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
 
     <% current_user.boards.each do |board| %>
+        <li role="presentation" class="divider"></li>
         <li role="presentation">
         <a role="menuitem" tabindex="-1" href="/boards/<%= board.id %>">
         <%= board.name %></a></li>
