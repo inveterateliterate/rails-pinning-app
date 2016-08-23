@@ -56,7 +56,7 @@ class PinsController < ApplicationController
 
   def repin
     @pin = Pin.find(params[:id])
-    @pin.pinnings.create(user: current_user)
+    @pin.pinnings.create(user: current_user, board: board)
     redirect_to user_path(current_user)
   end
 
