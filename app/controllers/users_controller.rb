@@ -19,7 +19,6 @@ class UsersController < ApplicationController
  # GET /users/new
   def new
     @user = User.new
-    @user.authenticate(params[:email], params[:password])
   end
 
   def authenticate
