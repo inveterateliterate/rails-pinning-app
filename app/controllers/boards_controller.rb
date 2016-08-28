@@ -1,4 +1,4 @@
-class BoardsController < ApplicationController
+  class BoardsController < ApplicationController
   before_action :require_login, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /boards
@@ -31,6 +31,7 @@ class BoardsController < ApplicationController
     @board = Board.new(board_params)
     respond_to do |format|
       if @board.save
+        @board_pinner = BoardPinner.create!(board_params[:board_pinners_attributes])
         format.html { redirect_to @board, notice: 'Board was successfully created.' }
         format.json { render :show, status: :created, location: @board }
       else
