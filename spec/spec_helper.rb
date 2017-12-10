@@ -31,5 +31,4 @@ RSpec.configure do |config|
       session.delete(:user_id)
     end
   end
-
 end

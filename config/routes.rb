@@ -15,3 +15,4 @@ Rails.application.routes.draw do
   resources :pins
 
   get '/library' => "pins#index"
+end

@@ -39,24 +39,25 @@ class PinsController < ApplicationController
   end
 
   def create	
-	@pin = Pin.create(pin_params)
-	if @pin.valid?
-	  @pin.save
-    if params[:pin][:pinning][:board_id]
-      board = Board.find(params[:pin][:pinning][:board_id])
-      @pin.pinnings.create!(user: current_user, board: board)
+    @pin = Pin.create(pin_params)
+    if @pin.valid?
+      @pin.save
+      if params[:pin][:pinning][:board_id]
+        board = Board.find(params[:pin][:pinning][:board_id])
+        @pin.pinnings.create!(user: current_user, board: board)
+      end
+      redirect_to pin_path(@pin)
+    else
+      @errors = @pin.errors	
+      render :new
     end
-	  redirect_to pin_path(@pin)
-	else
-	  @errors = @pin.errors	
-	  render :new
-	end
   end
 
   def repin
-    @pin = Pin.find(params[:id])
+    @pin = Pin.find(params[:id]
+    binding.pry
     board = Board.find(params[:pin][:pinning][:board_id])
-      @pin.pinnings.create!(user: current_user, board: board)
+    @pin.pinnings.create!(user: current_user, board: board)
     redirect_to user_path(current_user)
   end
 
