@@ -1,5 +1,4 @@
 class PinsController < ApplicationController
-  
   before_action :require_login, except: [:show, :show_by_name]
 
   def index
@@ -61,7 +60,7 @@ class PinsController < ApplicationController
     redirect_to user_path(current_user)
   end
 
-private
+  private
 
   def pin_params
     params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image, :user_id, :board_id)
