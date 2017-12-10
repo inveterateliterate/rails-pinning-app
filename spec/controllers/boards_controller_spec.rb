@@ -166,7 +166,7 @@ describe "GET #edit" do
       expect(response).to redirect_to(:login)
   end
 
-  it 'sets @followers to the user\'s followers' do
+  it "sets @followers to the user's followers" do
     get :edit, id: @board.id
     expect(assigns[:followers]).to eq(@user.user_followers)
   end

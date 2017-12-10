@@ -17,6 +17,7 @@
   # GET /boards/new
   def new
     @board = Board.new
+    @followers = current_user.user_followers
   end
 
   # GET /boards/1/edit
@@ -30,8 +31,7 @@
   def create
     @board = Board.new(board_params)
     respond_to do |format|
-      if @board.save
-        @board_pinner = BoardPinner.create!(board_params[:board_pinners_attributes])
+      if @board.save        
         format.html { redirect_to @board, notice: 'Board was successfully created.' }
         format.json { render :show, status: :created, location: @board }
       else
@@ -45,7 +45,6 @@
   # PATCH/PUT /boards/1.json
   def update
     @board = Board.find(params[:id])
-    @board_pinner = BoardPinner.create!(board_params[:board_pinners_attributes])
     respond_to do |format|
       if @board.update(board_params)
         format.html { redirect_to @board, notice: 'Board was successfully updated.' }
