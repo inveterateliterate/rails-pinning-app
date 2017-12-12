@@ -1,9 +1,10 @@
-  class BoardsController < ApplicationController
+class BoardsController < ApplicationController
   before_action :require_login, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_board, only: [:show, :edit, :update, :destroy]
 
   def index
-    @boards = current_user.pinnable_boards
+    user = params[:user] ? User.find(params[:user]) : current_user
+    @boards = user.pinnable_boards
   end
 
   def show

@@ -10,12 +10,12 @@ development:
   <<: *default
   database: coder-pinterest_development
   username: postgres
-  password: password
+  password: 
   host: localhost
   
 test:
   <<: *default
   database: coder-pinterest_test
   username: postgres
-  password: password
+  password: 
   host: localhost
