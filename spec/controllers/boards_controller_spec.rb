@@ -1,20 +1,4 @@
 RSpec.describe BoardsController, type: :controller do
-
-  # This should return the minimal set of attributes required to create a valid
-  # Board. As you add validations to Board, be sure to
-  # adjust the attributes here as well.
-  #let(:valid_attributes) {
-   # skip("Add a hash of attributes valid for your model")
-  #}
-
-  #let(:invalid_attributes) {
-  #  skip("Add a hash of attributes invalid for your model")
-  #}
-
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # BoardsController. Be sure to keep this updated too.
-  #let(:valid_session) { {} }
   before(:each) do
     @user = FactoryGirl.create(:user_with_boards_and_followers)
     @board = @user.boards.first
@@ -30,14 +14,14 @@ RSpec.describe BoardsController, type: :controller do
     end
   end
 
-  describe "GET #index" do
-    it "assigns @boards to be the users pinnable boards" do     
+  describe 'GET #index' do
+    it 'assigns @boards to be the users pinnable boards' do     
       get :index
       expect(assigns(:boards)).to eq(@user.pinnable_boards)
     end
   end
 
-  describe "GET new" do
+  describe 'GET new' do
     it 'responds with success' do
       get :new
       expect(response.success?).to be(true)
@@ -53,7 +37,7 @@ RSpec.describe BoardsController, type: :controller do
       expect(assigns(:board)).to be_a_new(Board)
     end
 
-    it "redirects to login if user is not signed in" do
+    it 'redirects to login if user is not signed in' do
       logout(@user)
       get :new
       expect(response).to redirect_to(:login)
@@ -63,15 +47,13 @@ RSpec.describe BoardsController, type: :controller do
   describe 'POST create' do
     before(:each) do
       @board_hash = {
-        name: "My Pins!"
+        name: 'My Pins!'
       }
     end
 
     after(:each) do
-      board = Board.find_by_name("My Pins!")
-      if !board.nil?
-        board.destroy
-      end
+      board = Board.find_by_name('My Pins!')
+      board.destroy if board
     end
 
     it 'responds with a redirect' do
@@ -96,19 +78,19 @@ RSpec.describe BoardsController, type: :controller do
     end
 
     it 'assigns the @errors instance variable on error' do
-      @board_hash[:name] = ""
+      @board_hash[:name] = ''
       post :create, board: @board_hash
       expect(assigns[:board].errors.any?).to be(true)
     end
 
-    it "redirects to login if user is not signed in" do
+    it 'redirects to login if user is not signed in' do
       logout(@user)
       get :edit, id: @board.id
       expect(response).to redirect_to(:login)
     end
   end
 
-  describe "GET #show" do
+  describe 'GET #show' do
     it 'assigns the requested board as @board' do
       get :show, id: @board.id
       expect(assigns[:board]).to eq(@board)
@@ -120,7 +102,7 @@ RSpec.describe BoardsController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
+  describe 'GET #edit' do
     it 'responds with success' do
       get :edit, id: @board.id
       expect(response.success?).to be(true)
@@ -137,9 +119,9 @@ RSpec.describe BoardsController, type: :controller do
     end
 
     it "redirects to login if user is not signed in" do
-        logout(@user)
-        get :edit, id: @board.id
-        expect(response).to redirect_to(:login)
+      logout(@user)
+      get :edit, id: @board.id
+      expect(response).to redirect_to(:login)
     end
 
     it "sets @followers to the user's followers" do
@@ -148,7 +130,7 @@ RSpec.describe BoardsController, type: :controller do
     end
   end
 
-  describe "PUT #update" do
+  describe 'PUT #update' do
     before(:each) do
       @board_hash = { name: @board.name }
     end
@@ -159,31 +141,31 @@ RSpec.describe BoardsController, type: :controller do
     end 
 
     it 'updates a board' do
-      @board_hash[:name] = "New Name"
+      @board_hash[:name] = 'New Name'
       put :update, id: @board.id, board: @board_hash
-      expect(@board.reload.name).to eq("New Name")
+      expect(@board.reload.name).to eq('New Name')
     end
 
     it 'redirects to the show view' do
-      @board_hash[:name] = "New Name"
+      @board_hash[:name] = 'New Name'
       put :update, id: @board.id, board: @board_hash
       @board.reload
       expect(response).to redirect_to(:board)
     end
 
     it 'redisplays edit form on error' do
-      @board_hash[:name] = ""
+      @board_hash[:name] = ''
       put :update, id: @board.id, board: @board_hash
       expect(response).to render_template(:edit)
     end
 
     it 'assigns the @errors instance variable on error' do
-      @board_hash[:name] = ""
+      @board_hash[:name] = ''
       put :update, id: @board.id, board: @board_hash
       expect(assigns[:board].errors.any?).to be(true)
     end
 
-    it "redirects to login if user is not signed in" do
+    it 'redirects to login if user is not signed in' do
       logout(@user)
       get :edit, id: @board.id
       expect(response).to redirect_to(:login)
@@ -203,28 +185,23 @@ RSpec.describe BoardsController, type: :controller do
       # Then we expect this record to have been created
       board_pinner = BoardPinner.where("user_id=? AND board_id=?", user_to_let_pin.user_id, @board.id)
       expect(board_pinner.present?).to be (true)
-  
-      # Let's clean up here
-      if board_pinner.present?
-        board_pinner.destroy_all
-      end
+
+      board_pinner.destroy_all if board_pinner.present?
     end
   end
 
-=begin
-  describe "DELETE #destroy" do
-    it "destroys the requested board" do
-      board = Board.create! valid_attributes
+  describe 'DELETE #destroy' do
+    it 'destroys the requested board' do
+      board = FactoryGirl.create(:board)
       expect {
-        delete :destroy, params: {id: board.to_param}, session: valid_session
+        delete :destroy, {id: board.to_param}
       }.to change(Board, :count).by(-1)
     end
 
-    it "redirects to the boards list" do
-      board = Board.create! valid_attributes
-      delete :destroy, params: {id: board.to_param}, session: valid_session
+    it 'redirects to the boards list' do
+      board = FactoryGirl.create(:board)
+      delete :destroy, {id: board.to_param}
       expect(response).to redirect_to(boards_url)
     end
   end
-=end
 end

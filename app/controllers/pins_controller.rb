@@ -6,20 +6,20 @@ class PinsController < ApplicationController
   end
 
   def edit
-     @pin = Pin.find(params[:id])
+    @pin = Pin.find(params[:id])
   end
   
   def update
-	@pin = Pin.find(params[:id])
-	if @pin.update_attributes(pin_params)
-		if @pin.valid?
-		@pin.save
-		redirect_to pin_path(@pin)
-		end
-	else
-		@errors = @pin.errors
-		render :edit
-	end	
+    @pin = Pin.find(params[:id])
+    if @pin.update_attributes(pin_params)
+      if @pin.valid?
+        @pin.save
+        redirect_to pin_path(@pin)
+      end
+    else
+      @errors = @pin.errors
+      render :edit
+    end	
   end
 
   def show
@@ -55,7 +55,7 @@ class PinsController < ApplicationController
 
   def repin
     @pin = Pin.find(params[:id])
-    board = Board.find(params[:pin][:board_id])
+    board = Board.find(params[:pin][:pinning][:board_id])
     @pin.pinnings.create!(user: current_user, board: board)
     redirect_to user_path(current_user)
   end
@@ -63,6 +63,6 @@ class PinsController < ApplicationController
   private
 
   def pin_params
-    params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image, :user_id, :board_id)
+    params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image, :user_id, pinnings_attributes: [:board_id])
   end
 end

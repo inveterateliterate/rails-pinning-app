@@ -120,12 +120,12 @@ RSpec.describe PinsController do
     end 
   end
 
-  describe "GET edit" do
+  describe 'GET edit' do
     before(:each) do
       @pin = Pin.first
     end
 
-    it "responds with success" do
+    it 'responds with success' do
       get :edit, id: @pin.id
       expect(response.success?).to be(true)
     end
@@ -135,23 +135,24 @@ RSpec.describe PinsController do
       expect(response).to render_template(:edit)
     end
 
-    it "assigns an instance variable called @pin to the Pin with the appropriate id" do
+    it 'assigns an instance variable called @pin to the Pin with the appropriate id' do
       get :edit, id: @pin.id 
       expect(assigns(:pin)).to eq(@pin)
     end
 
-    it "redirects to login if user is not signed in" do
+    it 'redirects to login if user is not signed in' do
       logout(@user)
       get :edit, id: @pin.id 
       expect(response).to redirect_to(:login)
     end
   end
 
-  describe "PUT update" do
+  describe 'PUT update' do
     before(:each) do
       @pin = Pin.last
-      @pin_hash = { title: @pin.title,
-        url: "newurl.com",
+      @pin_hash = { 
+        title: @pin.title,
+        url: 'newurl.com',
         slug: @pin.slug,
         category_id: @pin.category_id,
         text: @pin.text,
@@ -178,55 +179,54 @@ RSpec.describe PinsController do
     end
 
     it 'assigns the @errors instance variable on error' do
-      @pin_hash[:url] = ""
+      @pin_hash[:url] = ''
       put :update, pin: @pin_hash, id: @pin.id
       expect(assigns[:errors].present?).to be(true)
     end
 
     it "re-renders the 'edit' template" do
-      @pin_hash[:url] = ""
+      @pin_hash[:url] = ''
       put :update, pin: @pin_hash, id: @pin.id
       expect(response).to render_template(:edit)
     end
   end
 
-  describe "POST repin" do
+  describe 'POST repin' do
     before(:each) do
-      @user = FactoryGirl.create(:user)
+      @user = FactoryGirl.create(:user_with_boards)
       login(@user)
       @pin = FactoryGirl.create(:pin)
+      @board = @user.boards.first
     end
 
     after(:each) do
-      pin = Pin.find_by_slug("rails-wizard")
-      if !pin.nil?
-        pin.destroy
-      end
+      pin = Pin.find_by_slug('rails-wizard')
+      pin.try(:destroy)
       logout(@user)
     end
 
     it 'responds with a redirect' do
-      post :repin, pin: @pin, id: @pin.id
+      post :repin, pin: { pinning: { board_id: @board.id, user_id: @user.id } }, id: @pin.id
       expect(response.redirect?).to be(true)
     end
 
     it 'creates a user.pin' do
-      post :repin, pin: @pin, id: @pin.id, user: @user
+      post :repin, pin: { pinning: { board_id: @board.id, user_id: @user.id } }, id: @pin.id, user: @user
       expect(@user.pins(:id).present?).to be(true)
     end
 
     it 'redirects to the user show page' do
-      post :repin, pin: @pin, id: @pin.id, user: @user
+      post :repin, pin: { pinning: { board_id: @board.id, user_id: @user.id } }, id: @pin.id, user: @user
       expect(response).to redirect_to(user_path(@user.id))
     end
 
     it 'creates a pinning to a board for which the user is a board_pinner' do
       @pin_hash = { 
-      title: @pin.title,
-      url: @pin.url,
-      slug: @pin.slug,
-      category_id: @pin.category_id,
-      text: @pin.text
+        title: @pin.title,
+        url: @pin.url,
+        slug: @pin.slug,
+        category_id: @pin.category_id,
+        text: @pin.text
       }
     # image: Rack::Test::UploadedFile.new(Rails.root.join('app/assets/images/rails-logo-thumbnail.png'), 'image/png'), 
       #user_id: @pin.user_id }

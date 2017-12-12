@@ -27,6 +27,7 @@ class FollowersController < ApplicationController
   end
 
   def destroy
+    @follower = Follower.find(params[:id])
     @follower.destroy
     respond_to do |format|
       format.html { redirect_to followers_url, notice: 'Follower was successfully destroyed.' }
@@ -35,10 +36,6 @@ class FollowersController < ApplicationController
   end
 
   private
-
-  def set_follower
-    @follower = Follower.find(params[:id])
-  end
 
   def follower_params
     params.require(:follower).permit(:user_id, :follower_id)

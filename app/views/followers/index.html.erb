@@ -18,7 +18,8 @@
         <td><%= "#{followed.first_name} #{followed.last_name}" %></td>
        <!-- <td><%= link_to 'Boards', followed %></td>-->
        
-        <td><%= link_to 'Unfollow', followed, method: :delete, data: { confirm: 'Are you sure?' } %></td>       </tr>
+        <td><%= link_to 'Unfollow', followed, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
     <% end %>
   </tbody>
 </table>

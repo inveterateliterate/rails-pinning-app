@@ -1,12 +1,12 @@
   class BoardsController < ApplicationController
   before_action :require_login, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_board, only: [:show, :edit, :update, :destroy]
 
   def index
     @boards = current_user.pinnable_boards
   end
 
   def show
-    @board = Board.find(params[:id])
     @pins = @board.pins
   end
 
@@ -16,7 +16,6 @@
   end
 
   def edit
-    @board = Board.find(params[:id])
     @followers = current_user.user_followers
   end
 
@@ -34,7 +33,6 @@
   end
 
   def update
-    @board = Board.find(params[:id])
     respond_to do |format|
       if @board.update(board_params)
         format.html { redirect_to @board, notice: 'Board was successfully updated.' }

@@ -1,11 +1,9 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-   def require_login
-      if !logged_in?
-        redirect_to login_path
-      end
-    end
+  def require_login
+    redirect_to login_path if !logged_in?
+  end
 
   def current_user
   	@user ||= User.where("id=?",session[:user_id]).first
