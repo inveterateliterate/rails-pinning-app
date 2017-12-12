@@ -1,4 +1,3 @@
-
 <div class="header">
   <h1>
     <%= "#{@board.name}" %>
@@ -10,7 +9,7 @@
 <%= render partial: "shared/pins_list" %>
 
 <hr/>
-<% if @board.user_id == current_user.id %>
-<%= link_to 'Edit', edit_board_path(@board) %> |
-<%end%>
+
+<%= link_to_if @board.user_id == current_user.id, 'Edit', edit_board_path(@board) %> |
+
 <%= link_to 'Back', boards_path %>

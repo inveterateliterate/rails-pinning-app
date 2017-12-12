@@ -4,9 +4,9 @@
       <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
 
       <ul>
-      <% @user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
@@ -30,9 +30,8 @@
   <div class="actions">
     <%= f.submit %>
   </div>
-
-  
 <% end %>
+
 <% if !logged_in? %>
-    <%= link_to "Login", login_path %>
-  <%end%>
+  <%= link_to "Login", login_path %>
+<%end%>

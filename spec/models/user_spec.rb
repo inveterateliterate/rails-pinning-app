@@ -1,14 +1,10 @@
-require 'spec_helper'
-
 RSpec.describe User, type: :model do
   	before(:all) do
   		@user = User.create(first_name: "Skill", last_name: "Crush", email: "coder@skillcrush", password: "password")
-	end
+		end
  
 	after(:all) do
- 		if !@user.destroyed?
-    		@user.destroy
-  		end
+ 		@user.destroy if !@user.destroyed?
 	end
  
 	it 'authenticates and returns a user when valid email and password passed in' do		
@@ -20,5 +16,4 @@ RSpec.describe User, type: :model do
 	it { should validate_presence_of(:last_name) }
 	it { should validate_presence_of(:email) }
 	it { should validate_presence_of(:password) }
-
 end

@@ -1,7 +1,5 @@
-Category.create(
-  name: "rails")
-Category.create(
-  name: "ruby")
+Category.create(name: "rails")
+Category.create(name: "ruby")
 Pin.create(
   title: 'Rails Tutorial', 
   url: 'https://www.railstutorial.org/', 

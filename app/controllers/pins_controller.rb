@@ -1,5 +1,4 @@
 class PinsController < ApplicationController
-  
   before_action :require_login, except: [:show, :show_by_name]
 
   def index
@@ -7,20 +6,20 @@ class PinsController < ApplicationController
   end
 
   def edit
-     @pin = Pin.find(params[:id])
+    @pin = Pin.find(params[:id])
   end
   
   def update
-	@pin = Pin.find(params[:id])
-	if @pin.update_attributes(pin_params)
-		if @pin.valid?
-		@pin.save
-		redirect_to pin_path(@pin)
-		end
-	else
-		@errors = @pin.errors
-		render :edit
-	end	
+    @pin = Pin.find(params[:id])
+    if @pin.update_attributes(pin_params)
+      if @pin.valid?
+        @pin.save
+        redirect_to pin_path(@pin)
+      end
+    else
+      @errors = @pin.errors
+      render :edit
+    end	
   end
 
   def show
@@ -40,30 +39,30 @@ class PinsController < ApplicationController
   end
 
   def create	
-	@pin = Pin.create(pin_params)
-	if @pin.valid?
-	  @pin.save
-    if params[:pin][:pinning][:board_id]
-      board = Board.find(params[:pin][:pinning][:board_id])
-      @pin.pinnings.create!(user: current_user, board: board)
+    @pin = Pin.create(pin_params)
+    if @pin.valid?
+      @pin.save
+      if params[:pin][:pinning][:board_id]
+        board = Board.find(params[:pin][:pinning][:board_id])
+        @pin.pinnings.create!(user: current_user, board: board)
+      end
+      redirect_to pin_path(@pin)
+    else
+      @errors = @pin.errors	
+      render :new
     end
-	  redirect_to pin_path(@pin)
-	else
-	  @errors = @pin.errors	
-	  render :new
-	end
   end
 
   def repin
     @pin = Pin.find(params[:id])
     board = Board.find(params[:pin][:pinning][:board_id])
-      @pin.pinnings.create!(user: current_user, board: board)
+    @pin.pinnings.create!(user: current_user, board: board)
     redirect_to user_path(current_user)
   end
 
-private
+  private
 
   def pin_params
-    params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image, :user_id, :board_id)
+    params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image, :user_id, pinnings_attributes: [:board_id])
   end
 end
