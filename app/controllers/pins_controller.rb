@@ -8,25 +8,24 @@ class PinsController < ApplicationController
   def edit
     @pin = Pin.find(params[:id])
   end
-  
+
   def update
     @pin = Pin.find(params[:id])
     if @pin.update_attributes(pin_params)
-      if @pin.valid?
-        @pin.save
+      if @pin.save?
         redirect_to pin_path(@pin)
       end
     else
       @errors = @pin.errors
       render :edit
-    end	
+    end
   end
 
   def show
     @pin = Pin.find(params[:id])
-    @users = @pin.users.all 
+    @users = @pin.users.all
   end
-  
+
   def show_by_name
     @pin = Pin.find_by_slug(params[:slug])
     @users = @pin.users.all
@@ -38,7 +37,7 @@ class PinsController < ApplicationController
     @pinnable_boards = current_user.pinnable_boards
   end
 
-  def create	
+  def create
     @pin = Pin.create(pin_params)
     if @pin.valid?
       @pin.save
@@ -48,7 +47,7 @@ class PinsController < ApplicationController
       end
       redirect_to pin_path(@pin)
     else
-      @errors = @pin.errors	
+      @errors = @pin.errors
       render :new
     end
   end
