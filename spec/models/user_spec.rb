@@ -1,19 +1,19 @@
 RSpec.describe User, type: :model do
-  	before(:all) do
-  		@user = User.create(first_name: "Skill", last_name: "Crush", email: "coder@skillcrush", password: "password")
-		end
- 
-	after(:all) do
- 		@user.destroy if !@user.destroyed?
-	end
- 
-	it 'authenticates and returns a user when valid email and password passed in' do		
- 		#@user1 = User.authenticate(@user.email, @user.password)
- 		#expect(@user1).to eq(@user)
-	end
+  before(:all) do
+    @user = User.create(first_name: 'Skill', last_name: 'Crush', email: 'coder@skillcrush', password: 'password')
+  end
 
-	it { should validate_presence_of(:first_name) }
-	it { should validate_presence_of(:last_name) }
-	it { should validate_presence_of(:email) }
-	it { should validate_presence_of(:password) }
+  after(:all) do
+    @user.destroy unless @user.destroyed?
+  end
+
+  it 'authenticates and returns a user when valid email and password passed in' do
+    #@user1 = User.authenticate(@user.email, @user.password)
+    #expect(@user1).to eq(@user)
+  end
+
+  it { should validate_presence_of(:first_name) }
+  it { should validate_presence_of(:last_name) }
+  it { should validate_presence_of(:email) }
+  it { should validate_presence_of(:password) }
 end

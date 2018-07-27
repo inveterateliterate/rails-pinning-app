@@ -6,7 +6,7 @@ RSpec.describe BoardsController, type: :controller do
   end
 
   after(:each) do
-    if !@user.destroyed?
+    unless @user.destroyed?
       @user.board_pinners.destroy_all
       @user.pinnings.destroy_all
       @user.boards.destroy_all
@@ -15,7 +15,7 @@ RSpec.describe BoardsController, type: :controller do
   end
 
   describe 'GET #index' do
-    it 'assigns @boards to be the users pinnable boards' do     
+    it 'assigns @boards to be the users pinnable boards' do
       get :index
       expect(assigns(:boards)).to eq(@user.pinnable_boards)
     end
@@ -46,9 +46,7 @@ RSpec.describe BoardsController, type: :controller do
 
   describe 'POST create' do
     before(:each) do
-      @board_hash = {
-        name: 'My Pins!'
-      }
+      @board_hash = { name: 'My Pins!' }
     end
 
     after(:each) do
@@ -60,17 +58,17 @@ RSpec.describe BoardsController, type: :controller do
       post :create, board: @board_hash
       expect(response.redirect?).to be(true)
     end
- 
+
     it 'creates a board' do
       post :create, board: @board_hash
-      expect(Board.find_by_name("My Pins!").present?).to be(true)
+      expect(Board.find_by_name('My Pins!').present?).to be(true)
     end
- 
+
     it 'redirects to the show view' do
       post :create, board: @board_hash
       expect(response).to redirect_to(board_url(assigns(:board)))
     end
- 
+
     it 'redisplays new form on error' do
       @board_hash[:name] = nil
       post :create, board: @board_hash
@@ -118,7 +116,7 @@ RSpec.describe BoardsController, type: :controller do
       expect(assigns(:board)).to eq(@board)
     end
 
-    it "redirects to login if user is not signed in" do
+    it 'redirects to login if user is not signed in' do
       logout(@user)
       get :edit, id: @board.id
       expect(response).to redirect_to(:login)
@@ -138,7 +136,7 @@ RSpec.describe BoardsController, type: :controller do
     it 'responds with a redirect' do
       put :update, board: @board_hash, id: @board.id
       expect(response.redirect?).to be(true)
-    end 
+    end
 
     it 'updates a board' do
       @board_hash[:name] = 'New Name'
@@ -174,17 +172,17 @@ RSpec.describe BoardsController, type: :controller do
     it 'creates a BoardPinning' do
       # We get the user's first follower - this is the one we want to let pin on @board
       user_to_let_pin = @user.followers.first
-  
-      # Now we're updating the hash we pass in to add 
+
+      # Now we're updating the hash we pass in to add
       # board_pinners_attributes with our user_id
-      @board_hash[:board_pinners_attributes] = []      
+      @board_hash[:board_pinners_attributes] = []
       @board_hash[:board_pinners_attributes] << {user_id: user_to_let_pin.user_id, board_id: @board.id}
-  
+
       put :update, id: @board.id, board: @board_hash
-  
+
       # Then we expect this record to have been created
-      board_pinner = BoardPinner.where("user_id=? AND board_id=?", user_to_let_pin.user_id, @board.id)
-      expect(board_pinner.present?).to be (true)
+      board_pinner = BoardPinner.where('user_id=? AND board_id=?', user_to_let_pin.user_id, @board.id)
+      expect(board_pinner.present?).to be(true)
 
       board_pinner.destroy_all if board_pinner.present?
     end

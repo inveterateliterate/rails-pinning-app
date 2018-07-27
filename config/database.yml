@@ -5,17 +5,12 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
+  host: localhost
 
 development:
   <<: *default
   database: coder-pinterest_development
-  username: postgres
-  password: 
-  host: localhost
-  
+
 test:
   <<: *default
   database: coder-pinterest_test
-  username: postgres
-  password: 
-  host: localhost

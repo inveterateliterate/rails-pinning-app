@@ -20,10 +20,10 @@ class UsersController < ApplicationController
   def authenticate
     @user = User.authenticate(params[:email], params[:password])
     if @user.nil?
-      @error = "Your email or password is incorrect. Please try again."
-      render :login      
+      @error = 'Your email or password is incorrect. Please try again.'
+      render :login
     else
-      session[:user_id] = @user.id    
+      session[:user_id] = @user.id
       redirect_to user_path(@user)
     end
   end
@@ -72,7 +72,7 @@ class UsersController < ApplicationController
   end
 
   private
-  
+
   def set_user
     @user = User.find(params[:id])
   end

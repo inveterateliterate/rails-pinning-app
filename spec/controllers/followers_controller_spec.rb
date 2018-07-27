@@ -7,8 +7,8 @@ RSpec.describe FollowersController, type: :controller do
   end
 
   after(:each) do
-    if !@user.destroyed?
-      Follower.where("follower_id=?", @user.id).destroy_all
+    unless @user.destroyed?
+      Follower.where(follower_id: @user.id).destroy_all
       @user.destroy
     end
   end
@@ -38,7 +38,7 @@ RSpec.describe FollowersController, type: :controller do
     end
 
     it 'renders the new view' do
-      get :new      
+      get :new
       expect(response).to render_template(:new)
     end
 
@@ -52,14 +52,14 @@ RSpec.describe FollowersController, type: :controller do
       expect(assigns[:users]).to eq(@user.not_followed)
     end
 
-    it "redirects to login if user is not signed in" do
+    it 'redirects to login if user is not signed in' do
       logout(@user)
       get :index
       expect(response).to redirect_to(:login)
     end
   end
 
-  describe "POST create" do
+  describe 'POST create' do
     before(:each) do
       @follower_user = FactoryGirl.create(:user)
       @follower_hash = {
@@ -69,8 +69,8 @@ RSpec.describe FollowersController, type: :controller do
     end
 
     after(:each) do
-      follower = Follower.where("user_id=? AND follower_id=?", @user.id, @follower_user.id)
-      if !follower.empty?
+      follower = Follower.where('user_id=? AND follower_id=?', @user.id, @follower_user.id)
+      unless follower.empty?
         follower.destroy_all
         @follower_user.destroy
       end
@@ -78,7 +78,7 @@ RSpec.describe FollowersController, type: :controller do
 
     it 'responds with a redirect' do
       post :create, follower: @follower_hash
-      expect(response.redirect?).to be(true) 
+      expect(response.redirect?).to be(true)
     end
 
     it 'creates a follower' do
@@ -96,13 +96,13 @@ RSpec.describe FollowersController, type: :controller do
     it 'destroys the requested follower' do
       follower = Follower.create(user: FactoryGirl.create(:user), follower_id: @user.id)
       expect {
-        delete :destroy, {id: follower.to_param}
+        delete :destroy, { id: follower.to_param }
       }.to change(Follower, :count).by(-1)
     end
 
     it 'redirects to the followers list' do
       follower = Follower.create(user: FactoryGirl.create(:user), follower_id: @user.id)
-      delete :destroy, {id: follower.to_param}
+      delete :destroy, { id: follower.to_param }
       expect(response).to redirect_to(followers_url)
     end
   end
